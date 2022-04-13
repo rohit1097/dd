@@ -29,12 +29,12 @@
         <repository>
             <id>deployment</id>
             <name>Internal Releases</name>
-            <url>http://10.0.28.136:8000/repository/jen-release/</url>
+            <url>http://18.179.198.134:8081/repository/j-nexus//</url>
         </repository>
         <snapshotRepository>
             <id>deployment</id>
             <name>Internal Snapshot Releases</name>
-            <url>http://10.0.28.136:8000/repository/jen-snap/</url>
+            <url>http://18.179.198.134:8081/repository/j-snap/</url>
         </snapshotRepository>
     </distributionManagement>
   <dependencies>
