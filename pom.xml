@@ -29,12 +29,12 @@
         <repository>
             <id>deployment</id>
             <name>Internal Releases</name>
-            <url>http://54.249.85.202:8081/repository/rohit-re/</url>
+            <url>http://18.117.86.144:8081/repository/rohit-release-repo/</url>
         </repository>
         <snapshotRepository>
             <id>deployment</id>
             <name>Internal Snapshot Releases</name>
-            <url>http://54.249.85.202:8081/repository/rohit-snap/</url>
+            <url>http://18.117.86.144:8081/repository/rohit-snap-repo/</url>
         </snapshotRepository>
     </distributionManagement>
   <dependencies>
