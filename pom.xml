@@ -34,7 +34,7 @@
         <snapshotRepository>
             <id>deployment</id>
             <name>Internal Snapshot Releases</name>
-            <url>http://18.117.86.144:8081/repository/rohit-snap-repo/</url>
+            <url>http://18.117.86.144:8081/repository/tomcat-snap-repo/</url>
         </snapshotRepository>
     </distributionManagement>
   <dependencies>
