@@ -1,0 +1,63 @@
+pipeline{
+    agent any
+    environment {
+        PATH = "$PATH:/usr/share/maven"
+    }
+
+    stages{
+       stage('GetCode'){
+            steps{
+                git branch: 'main', url: 'https://github.com/rohit1097/dd.git'}
+         }        
+
+
+       stage('Build'){
+            steps{
+                sh 'mvn clean package'
+            }
+         }
+ 
+ 
+        stage('push artifacts') {
+            steps{
+//               nexusArtifactUploader artifacts: [[artifactId: '${POM_ARTIFACTID}', classifier: '', file: 'target/studentapp-2.5-SNAPSHOT.war', type: '${POM_PACKAGING}']], credentialsId: 'nexus-cred', groupId: '${POM_GROUPID}', nexusUrl: '54.249.85.202:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'rohit-snap', version: '${POM_version}' 
+//                nexusArtifactUploader artifacts: [[artifactId: 'studentapp', classifier: '', file: 'target/studentapp-2.5-SNAPSHOT.war', type: 'war']], credentialsId: 'nexus-cred', groupId: 'com.jdevs', nexusUrl: '54.249.85.202:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'rohit-snap', version: '2.5-SNAPSHOT'
+
+                nexusArtifactUploader artifacts: [[artifactId: 'studentapp', classifier: '', file: 'target/studentapp-2.5-SNAPSHOT.war', type: 'war']], credentialsId: 'nexus-144', groupId: 'com.jdevs', nexusUrl: '18.117.86.144:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'tomcat-snap-repo', version: '2.5-SNAPSHOT'
+
+        }
+        }
+
+ 
+        stage('SonarQube analysis') {
+//    def scannerHome = tool 'SonarScanner 4.0';
+            steps{
+            withSonarQubeEnv('sonarqube-8.9.8') { 
+        // If you have configured more than one global server connection, you can specify its name
+//      sh "${scannerHome}/bin/sonar-scanner"
+            sh "mvn sonar:sonar"
+            }
+        }
+        }
+
+
+        stage('deploy to tomcat-server') {
+		     steps {
+	            deploy adapters: [tomcat9(credentialsId: 'tomcat-cred', path: '', url: 'http://18.224.204.241:8080/')], contextPath: 'studentapp', war: '**/*.war'
+		  }
+		} 
+ 
+ 
+    stage('DAST'){
+        steps{
+            sshagent(['tomcat']){
+                sh 'ssh -o StrictHostKeyChecking=no ubuntu@18.224.204.241 "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://18.224.204.241:8080/studentapp/" || true'
+            }
+        }
+    }
+ 
+ 
+ 
+       
+    }
+}
